@@ -1,4 +1,4 @@
 </div><!-- end content -->
-<div id="footer">&copy; <? echo date("Y"); ?> University of Washington Educational Outreach</div>
+<div id="footer">This insult provided by University of Washington Educational Outreach</div>
 </body>
 </html>

@@ -124,6 +124,10 @@ hr{
 	background-color:#eee;
 }
 
+#insult{
+	font-size: 2em;
+	font-weight: bold;
+}
 
 /*  header */
 #header {

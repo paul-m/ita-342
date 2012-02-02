@@ -15,7 +15,8 @@ if(isset($_POST['insult'])){
   if ($_POST['random_insult2']) $in2 = $insult_2[array_rand($insult_2)];
   if ($_POST['random_insult3']) $in3 = $insult_3[array_rand($insult_3)];
   
-  echo "<b>Thou art a $in1, $in2, $in3!</b>";
+  echo '<div id="insult">Thou art a ' . "$in1, $in2, $in3!" . '</div>';
+  echo '<p>Shall I <a href="' . $_SERVER['PHP_SELF'] . '">insult you again</a>?</p>';
 }else{
   // Ask the user for their choices
   // This function makes three pull down menus
