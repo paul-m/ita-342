@@ -1,0 +1,196 @@
+body	{
+    border-top: 10px solid #2D0D55;
+	background-color: #EAEFF2;
+	padding: 0;
+	text-align: center;
+	margin:0;
+	font-family: Tahoma, "Century Gothic","Trebuchet MS", "Bitstream Vera Sans", verdana, sans-serif;
+	}
+
+p, ol, li {
+font-family: Tahoma, "Century Gothic", helvetica, "Trebuchet MS", "Bitstream Vera Sans", arial, sans-serif;
+color: #000;
+text-align:left;
+font-weight: normal;
+letter-spacing: 1px;
+font-size: x-small;
+}
+
+td, tr{
+font-family: Tahoma, "Century Gothic", helvetica, "Trebuchet MS", "Bitstream Vera Sans", arial, sans-serif;
+color: #444D53;
+font-weight: normal;
+letter-spacing: 1px;
+font-size: xx-small;
+padding: 10px
+
+}
+
+i {
+font-family: Tahoma, "Century Gothic", helvetica, "Trebuchet MS", "Bitstream Vera Sans", arial, sans-serif;
+color: #444D53;
+font-weight: bold;
+letter-spacing: 1px;
+font-size: x-small;
+}
+
+b{
+font-size: xx-small;
+color: #697278;
+letter-spacing: 1px;
+font-size: xx-small;
+}
+
+b.b{
+font-family: Tahoma, "Century Gothic", helvetica, "Trebuchet MS", "Bitstream Vera Sans", arial, sans-serif;
+color: #444D53;
+font-weight: bold;
+letter-spacing: 1px;
+font-size: x-small;
+}
+
+i.i{
+font-family: Tahoma, "Century Gothic", helvetica, "Trebuchet MS", "Bitstream Vera Sans", arial, sans-serif;
+color: #444D53;
+font-style: italic;
+font-weight: normal;
+letter-spacing: 1px;
+font-size: xx-small;
+}
+
+
+h1, h2, h3, h4, h5, h6	{
+	font-family: "Century Gothic", Myriad, "Gill Sans", "Trebuchet MS", "Bitstream Vera Sans", verdana, lucida, arial, helvetica, sans-serif;
+    color: #697278;
+	text-align:center;
+	font-weight: normal;
+	margin-top: 25px;
+	margin-bottom: 2px;
+	letter-spacing: 1px;
+	}
+	
+h3{
+	font-size:80%;
+}
+TEXTAREA { 
+}
+
+
+SELECT { 
+}
+
+a:link, a:visited {
+	font-weight : bold; 
+	text-decoration : none;
+	color: #2D0D55;
+	background: transparent; 
+	}
+
+a:hover {
+	font-weight : bold; 
+	text-decoration : underline;
+	color: #000;
+	background: transparent; 
+	}
+
+a:active {
+	font-weight : bold; 
+	text-decoration : none;
+	color: #2D0D55;
+	background: transparent;  
+	}
+	
+hr{
+	display:none;
+}
+
+#wrapper{
+	padding:20px;
+	margin:0px auto;
+	text-align:left;
+	width:600px;
+	height:100%;
+	background-color:#fff;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+}
+
+#content{
+	margin:20px;
+}
+
+#formsubmit{
+	padding:20px;
+	background-color:#eee;
+}
+
+#insult{
+	font-size: 2em;
+	font-weight: bold;
+}
+
+/*  header */
+#header {
+	margin:0;
+	padding:50px;
+	text-align:center;
+	color:#fff;
+	background-color:#666;
+	}
+/*  footer */
+#footer {
+	margin:20px;
+	padding:10px;
+	font-size:xx-small;
+	text-align:center;
+	color:#666;
+	background-color:#ececec;
+	}
+/*  menu */
+#menu ul {
+	margin-left: 0;
+	padding-left: 0;
+	display: inline;
+	} 
+
+#menu ul li {
+	margin-left: 0;
+	padding: 3px 15px;
+	border-left: 1px solid #000;
+	list-style: none;
+	display: inline;
+	}
+	
+	
+#menu ul li.first {
+	margin-left: 0;
+	border-left: none;
+	list-style: none;
+	display: inline;
+	}
+
+#menu ul li a:link, a:visited {
+	text-decoration : none;
+	color:#454545;
+	background: transparent;
+	}
+
+#menu ul li a:hover {
+	text-decoration:none;
+	border-bottom: dotted 1px #000; 
+	color:#000;
+
+}
+
+
+
+
+
+.tagged { 
+	margin: 0 0 50px 0; 
+	padding: 5px 0 0 0; 
+	font-size: 1.2em; 
+	line-height: 1.7em; 
+	color: #888;
+	clear: both; 
+	}
