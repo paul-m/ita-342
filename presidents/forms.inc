@@ -1,8 +1,5 @@
 <?php
 
-include_once "crud.inc";
-//include_once "debug.inc";
-
 // generate the UI forms for the presidents.
 
 function form_all_presidents($presidents, $schema) {
@@ -43,9 +40,8 @@ function form_all_presidents($presidents, $schema) {
   echo '</table>';
 }
 
-function form_one_president($president_id, $schema) {
+function form_one_president($president, $schema) {
   // make a form for the one president, including a delete button.
-  $president = crud_president_load_by_id($president_id);
   // $president might be null, given that we're adding a president
   if (!$president) $president = array();
   echo '<h2>Edit a President</h2>';

@@ -6,7 +6,7 @@
 
 function get_db() {
   return array(
-    'db'=> 'paulm77',
+    'database'=> 'paulm77',
     'user' => 'paulm77',
     'password' => 'paulm77',
     'host' => "ovid.u.washington.edu",

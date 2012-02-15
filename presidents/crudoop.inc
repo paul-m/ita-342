@@ -1,0 +1,110 @@
+<?php
+
+/**
+ * OOP on CRUD
+ */
+
+class CRUDOOP {
+
+  private $db_connection; // mysqli object
+  private $db_info; // db credentials/server info
+  
+  function __construct($db = array()) {
+    $this->db_connect($db);
+  }
+  
+  function __destruct() {
+    $this->db_disconnect();
+  }
+  
+  function db_connect($db = array()) {
+    // init db connection.
+    $this->db_connection = new mysqli($db['host'], $db['user'], $db['password'], $db['database'], $db['port']);
+    $this->db_info = $db;
+    if ($this->db_connection->connect_errno) {
+      // this should be an exception.
+      echo "Failed to connect to MySQL: " . $this->db_connection->connect_error;
+      $this->db_connection = NULL;
+      $this->db_info = NULL;
+    }
+    return $this->db_connection;
+  }
+  
+  function db_disconnect() {
+    // close db connection.
+    if ($this->db_connection) {
+      $this->db_connection->close();
+      $this->db_connection = NULL;
+      $this->db_info = NULL;
+    }
+  }
+
+  function write_record($record) {
+    // if 'id' is given, then it's an update. otherwise, an insert.
+    // if there's no id, then this is an insert.
+    $keys = array_intersect_key($record, get_schema());
+    if (!array_key_exists('id', $keys)) {
+      // prepare an insert.
+      $into = array();
+      $values = array();
+      foreach ($keys as $key=>$value) { // discard $value
+        $into[] = $key;
+        $values[] = $record[$key];
+      }
+      // in this case I know that all columns are strings, so
+      // it's easy to put the ticks around them.
+      $queryString = 'INSERT INTO presidents (' .
+        implode(", ", $into) .
+        ") VALUES ('" .
+        implode("', '", $values) . "')";
+    } else {
+      // prepare an update.
+      $set = array();
+      foreach ($keys as $key=>$value) {
+        $set[$key] = $key . "='" . $record[$key] . "'";
+      }
+      // remove the id from the SET part of the query
+      unset($set['id']);
+      $queryString = 'UPDATE presidents SET ' .
+        implode(", ", $set) .
+        " WHERE id = " . $record['id'];
+    }
+    $query = $this->db_connection->query($queryString);
+    // TODO: exception for a bad outcome.
+  }
+
+  function delete_record($id) {
+    // for schema, delete record where key = id.
+    if ($this->db_connection) {
+      $query = $this->db_connection->query("DELETE FROM presidents WHERE id = " . $id);
+      if (!$query) {
+        echo "Failed to delete id $id from MySQL.";
+      }
+    }
+  }
+  
+  function load_all_records() {
+    if ($this->db_connection) {
+      $query = $this->db_connection->query("SELECT * FROM presidents ORDER BY startdate ASC");
+      $i=0;
+      $result = array();
+      while($i++ < $query->num_rows) {
+        $row = $query->fetch_assoc();
+        $result[$row['id']] = $row;
+      }
+      return $result;
+    }
+    return array();
+  }
+  
+  function load_record($id) {
+    // for schema, load record where key = id.
+    // load a single president into an associative array
+    if ($this->db_connection) {
+      $query = $this->db_connection->query("SELECT * FROM presidents WHERE id = " . $id);
+      return $query->fetch_assoc();
+    }
+    return array();
+  }
+}
+
