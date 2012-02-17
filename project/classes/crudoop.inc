@@ -39,11 +39,12 @@ class CRUDOOP {
     }
   }
 
-  function write_record($record) {
+  function write_record($record, $table, $idkey = NULL) {
     // if 'id' is given, then it's an update. otherwise, an insert.
     // if there's no id, then this is an insert.
-    $keys = array_intersect_key($record, get_schema());
-    if (!array_key_exists('id', $keys)) {
+    $schema = get_schema($table);
+    $keys = array_intersect_key($record, $schema);
+    if (!array_key_exists($idkey, $keys)) {
       // prepare an insert.
       $into = array();
       $values = array();
@@ -53,7 +54,7 @@ class CRUDOOP {
       }
       // in this case I know that all columns are strings, so
       // it's easy to put the ticks around them.
-      $queryString = 'INSERT INTO presidents (' .
+      $queryString = 'INSERT INTO ' . $table . ' (' .
         implode(", ", $into) .
         ") VALUES ('" .
         implode("', '", $values) . "')";
@@ -64,28 +65,29 @@ class CRUDOOP {
         $set[$key] = $key . "='" . $record[$key] . "'";
       }
       // remove the id from the SET part of the query
-      unset($set['id']);
-      $queryString = 'UPDATE presidents SET ' .
+      unset($set[$idkey]);
+      $queryString = 'UPDATE ' . $table . ' SET ' .
         implode(", ", $set) .
-        " WHERE id = " . $record['id'];
+        " WHERE " . $idkey . " = " . $record[$idkey];
     }
     $query = $this->db_connection->query($queryString);
     // TODO: exception for a bad outcome.
   }
 
-  function delete_record($id) {
+  function delete_record($id, $table, $idkey) {
     // for schema, delete record where key = id.
     if ($this->db_connection) {
-      $query = $this->db_connection->query("DELETE FROM presidents WHERE id = " . $id);
+      $query = $this->db_connection->query("DELETE FROM " . $table .
+        ' WHERE ' . $idkey . ' = ' . $id);
       if (!$query) {
         echo "Failed to delete id $id from MySQL.";
       }
     }
   }
   
-  function load_all_records() {
+  function load_all_records($table) {
     if ($this->db_connection) {
-      $query = $this->db_connection->query("SELECT * FROM presidents ORDER BY startdate ASC");
+      $query = $this->db_connection->query("SELECT * FROM " . $table);
       $i=0;
       $result = array();
       while($i++ < $query->num_rows) {
@@ -97,11 +99,12 @@ class CRUDOOP {
     return array();
   }
   
-  function load_record($id) {
+  function load_record($id, $table, $idkey) {
     // for schema, load record where key = id.
     // load a single president into an associative array
     if ($this->db_connection) {
-      $query = $this->db_connection->query("SELECT * FROM presidents WHERE id = " . $id);
+      $query = $this->db_connection->query("SELECT * FROM " . $table .
+        " WHERE " . $idkey . " = " . $id);
       return $query->fetch_assoc();
     }
     return array();
