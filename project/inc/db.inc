@@ -1,8 +1,53 @@
 <?php
 
 /**
- * @file Array-based schema abstraction for CRUD
+ * @file Some DB abstraction so we can have a singleton connection.
  */
+
+/**
+ * Static DB class so we can have a singleton connection to the db.
+ * This class only manages the connection.
+ * Consumers should generally use DB::connection() to get the mysqli object
+ * and let the class deal with the mechanics.
+ */
+class DB {
+  private static $mysqli = NULL; // mysqli object
+
+  /**
+   * Set up the connection by creating a mysqli object.
+   */
+  public static function start_connect($db = NULL) {
+    if (!$db) $db = get_db(); // get_db() should be a static property of this class.
+    self::$mysqli = new mysqli($db['host'], $db['user'], $db['password'], $db['database'], $db['port']);
+    if (self::$mysqli->connect_errno) {
+      self::$mysqli = NULL;
+      // this should be an exception.
+      echo "Failed to connect to MySQL: " . self::$mysqli->connect_error;
+    }
+  }
+  
+  public static function end_connect() {
+    if (self::$mysqli) {
+      self::$mysqli->close();
+    }
+    self::$mysqli = NULL;
+  }
+
+  /**
+   * The designated function to use in this class.
+   */
+  public static function connection() {
+    if (!self::$mysqli) self::start_connect();
+    return self::$mysqli;
+  }
+}
+
+function db_shutdown() {
+  DB::end_connect();
+}
+
+register_shutdown_function('db_shutdown');
+
 
 /**
  * get_db function.
@@ -38,8 +83,10 @@ function get_schema($name = '') {
       'first_name' => 'VARCHAR',// varchar(256) default NULL,
       'last_name' => 'VARCHAR',// varchar(256) default NULL,
       'user_name' => 'VARCHAR',// varchar(256) default NULL,
-      'password' => 'VARCHAR',// varchar(40) default NULL,
+      'password' => 'PASSWORD',// password special case. replaced with hash on write.
       'hint' => 'VARCHAR',// varchar(40) default NULL,
+      'created' => 'DATETIME', // datetime default NULL,
+      'modified' => 'DATETIME', //datetime default NULL,
       'email_address' => 'VARCHAR',// varchar(256) default NULL,
     ),
   );
@@ -47,18 +94,18 @@ function get_schema($name = '') {
 }
 
 /*
-CREATE TABLE IF NOT EXISTS 'users' (
-  'id' int(11) NOT NULL auto_increment,
-  'type' varchar(255) NOT NULL default 'user',
-  'first_name' varchar(256) default NULL,
-  'last_name' varchar(256) default NULL,
-  'user_name' varchar(256) default NULL,
-  'password' varchar(40) default NULL,
-  'hint' varchar(40) default NULL,
-  'created' datetime default NULL,
-  'modified' datetime default NULL,
-  'email_address' varchar(256) default NULL,
-  PRIMARY KEY  ('id'),
-  KEY 'user_name' ('user_name')
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL auto_increment,
+  `type` varchar(255) NOT NULL default 'user',
+  `first_name` varchar(256) default NULL,
+  `last_name` varchar(256) default NULL,
+  `user_name` varchar(256) default NULL,
+  `password` varchar(40) default NULL,
+  `hint` varchar(40) default NULL,
+  `created` datetime default NULL,
+  `modified` datetime default NULL,
+  `email_address` varchar(256) default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `user_name` (`user_name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 */

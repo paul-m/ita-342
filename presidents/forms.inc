@@ -55,10 +55,10 @@ function form_one_president($president, $schema) {
       $president[$key] = '';
     }
     unset($president['id']);
-    $president['last_name'] = 'fooo barrrr';
+    $president['last_name'] = 'fooo barrrr'; // FOR DEBUG
   }
   echo '<input type="hidden" id="action_type" name="type" value="' . $actionType . '" />' . "\n";
-  if ($actionType == 'update') {
+  if ($actionType == 'edit') {
     echo '<input type="hidden" id="prez_id" name="id" value="' . $president['id'] . '" />' . "\n";
   }
   foreach ($schema as $key=>$value) {

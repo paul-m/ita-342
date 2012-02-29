@@ -12,7 +12,7 @@ include_once "forms.inc";
 // We could put this off until just before we
 // need to query, but for now we're testing
 // CRUDOOP, not efficiency.
-$cruddy = new CRUDOOP(get_db());
+$cruddy = new CRUDOOP(get_schema('presidents'), get_db());
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if (!empty($_GET['type'])) {
@@ -24,10 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $id = $_GET['id'];
         if (!is_numeric($id)) $id = -1;
     }
-    form_one_president($cruddy->load_record($id), get_schema('presidents'));
+    form_one_president($cruddy->load_record($id, 'presidents', 'id'), get_schema('presidents'));
   } else {
     // show big form
-    form_all_presidents($cruddy->load_all_records(), get_schema('presidents'));
+    form_all_presidents($cruddy->load_all_records('presidents'), get_schema('presidents'));
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // POSTed forms can do one of three things: add, edit, or delete.
@@ -36,20 +36,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     switch ($type) {
       case 'delete':
         // delete item
-        $cruddy->delete_record(sanitize_int($_POST['id']));
+        $cruddy->delete_record(sanitize_INT($_POST['id']), 'presidents', 'id');
         break;
       case 'add':
       case 'edit':
-        $input = sanitize_schema_input($_POST, get_schema());
+        $input = sanitize_schema_input($_POST, get_schema('presidents'));
         if ($type == 'add') unset($input['id']);
-        $cruddy->write_record($input);
+        $cruddy->write_record($input, 'presidents', 'id');
         break;
     }
   }
-  form_all_presidents($cruddy->load_all_records(), get_schema());
+  form_all_presidents($cruddy->load_all_records('presidents'), get_schema('presidents'));
 } else {
   echo "<h2>Unsure what you're requesting.</h2>";
-  form_all_presidents($cruddy->load_all_records(), get_schema());
+  form_all_presidents($cruddy->load_all_records('presidents'), get_schema('presidents'));
 }
 
 ?>

@@ -4,43 +4,16 @@
  * OOP on CRUD
  */
 
-class CRUDOOP {
+require_once 'db.inc';
 
-  private $db_connection; // mysqli object
-  private $db_info; // db credentials/server info
+class CRUDOOP {
   protected $schema;
 
-  function __construct($schema = array(), $db = array()) {
-    $this->schema = $schema;
-    $this->db_connect($db);
-  }
-  
-  function __destruct() {
-    $this->db_disconnect();
+  function __construct($schema = array()) {
+//  echo '<pre>' . var_dump($schema) . '</pre>';
+    $this->set_schema($schema);
   }
 
-  function db_connect($db = array()) {
-    // init db connection.
-    $this->db_connection = new mysqli($db['host'], $db['user'], $db['password'], $db['database'], $db['port']);
-    $this->db_info = $db;
-    if ($this->db_connection->connect_errno) {
-      // this should be an exception.
-      echo "Failed to connect to MySQL: " . $this->db_connection->connect_error;
-      $this->db_connection = NULL;
-      $this->db_info = NULL;
-    }
-    return $this->db_connection;
-  }
-
-  function db_disconnect() {
-    // close db connection.
-    if ($this->db_connection) {
-      $this->db_connection->close();
-      $this->db_connection = NULL;
-      $this->db_info = NULL;
-    }
-  }
-  
   function set_schema($schema = array()) {
     $this->schema = $schema;
   }
@@ -71,7 +44,8 @@ class CRUDOOP {
   
   /**
    * Given a value and a key, 'entick' string values
-   * as determined by the schema.
+   * as determined by the schema. Helper for building
+   * SQL queries.
    */
   function sql_value_entick($value, $key) {
 //echo "sql_value_entick: $key : $value\n";
@@ -149,8 +123,9 @@ if (!$this->db_connection) echo "woops no db!";
   function load_record($id, $table, $idkey) {
     // for schema, load record where key = id.
     // load a single president into an associative array
-    if ($this->db_connection) {
-      $query = $this->db_connection->query("SELECT * FROM " . $table .
+    $db_connection = DB::connection();
+    if ($db_connection) {
+      $query = $db_connection->query("SELECT * FROM " . $table .
         " WHERE " . $idkey . " = " . $id);
       return $query->fetch_assoc();
     }
