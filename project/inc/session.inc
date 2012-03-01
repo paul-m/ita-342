@@ -27,7 +27,7 @@ class Session {
       return $_SESSION[$key];
     return $default;
   }
-  
+
   /**
    * Set session variables.
    */
@@ -66,5 +66,4 @@ class Session {
     if ($function) return $function(self::get('messages', array()));
     return self::get('messages', array());
   }
-
 }

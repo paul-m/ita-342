@@ -5,25 +5,48 @@
  */
 
 require_once 'db.inc';
+require_once 'schema.inc';
 
 class CRUDOOP {
-  protected $schema;
+  protected $schema; // display/validation data.
+  protected $table; // name of table.
+  protected $idkey; // unique id for this table.
 
-  function __construct($schema = array()) {
-//  echo '<pre>' . var_dump($schema) . '</pre>';
-    $this->set_schema($schema);
+  function __construct($table = '') {
+    $this->set_schema($table);
   }
 
-  function set_schema($schema = array()) {
-    $this->schema = $schema;
+  function set_schema($table = '') {
+    $this->table = NULL;
+    $this->schema = NULL;
+    $this->idkey = '';
+    $this->schema = get_schema($table);
+    if ($this->schema) $this->table = $table;
+    if (isset($this->schema['#UNIQUEID'])) {
+      $this->idkey = $this->schema['#UNIQUEID'];
+    } else {
+      $this->idkey = '';
+    }
+  }
+
+  function load_record($id) {
+    if ($this->schema) {
+      $db_connection = DB::connection();
+      if ($db_connection) {
+        $query = $db_connection->query("SELECT * FROM " . $this->table .
+          " WHERE " . $this->idkey . " = " . $id);
+        return $query->fetch_assoc();
+      }
+    }
+    return array();
   }
 
   /**
    * helper function to convert a unix timestamp to a proper
    * DATETIME, for a given key within the record.
    */
-  function convert_unix_to_datetime_for_key($record, $table, $key) {
-    if ($this->$schema[$key] == 'DATETIME') {
+  function convert_unix_to_datetime_for_key(&$record, $key) {
+    if ($this->schema[$key]['type'] == 'DATETIME') {
       // convert the item in the record.
       $timestamp = $record[$key];
       $record[$key] = date("Y-m-d H:i:s", $timestamp);
@@ -34,8 +57,8 @@ class CRUDOOP {
    * helper function to convert a DATETIME to a
    * timestamp, for a given key within the record.
    */
-  function convert_datetime_to_unix_for_key($record, $table, $key) {
-    if ($this->schema[$key] == 'DATETIME') {
+  function convert_datetime_to_unix_for_key(&$record, $key) {
+    if ($this->schema[$key]['type'] == 'DATETIME') {
       // convert the item in the record.
       $datetime = $record[$key];
       $record[$key] = strtotime($datetime);
@@ -47,15 +70,16 @@ class CRUDOOP {
    * as determined by the schema. Helper for building
    * SQL queries.
    */
-  function sql_value_entick($value, $key) {
+/*  function sql_value_entick($value, $key) {
 //echo "sql_value_entick: $key : $value\n";
-    switch ($this->schema[$key]) {
+    switch ($this->schema[$key]['sanitize']) {
       // textual types get ticks
       // PASSWORD is expected to have been hashed.
       // DATETIME is expected to be formatted properly by caller.
       case 'VARCHAR':
       case 'PASSWORD':
       case 'DATETIME':
+      case 'EMAIL':
         return "'" . $value . "'";
     }
     return $value;
@@ -95,7 +119,7 @@ if (!$this->db_connection) echo "woops no db!";
     // TODO: exception for a bad outcome.
   }
 
-  function delete_record($id, $table, $idkey) {
+  function delete_record($id, $table, $idkey = 'id') {
     // for schema, delete record where key = id.
     if ($this->db_connection) {
       $query = $this->db_connection->query("DELETE FROM " . $table .
@@ -106,7 +130,7 @@ if (!$this->db_connection) echo "woops no db!";
     }
   }
   
-  function load_all_records($table) {
+  function load_all_records() {
     if ($this->db_connection) {
       $query = $this->db_connection->query("SELECT * FROM " . $table);
       $i=0;
@@ -119,17 +143,7 @@ if (!$this->db_connection) echo "woops no db!";
     }
     return array();
   }
-  
-  function load_record($id, $table, $idkey) {
-    // for schema, load record where key = id.
-    // load a single president into an associative array
-    $db_connection = DB::connection();
-    if ($db_connection) {
-      $query = $db_connection->query("SELECT * FROM " . $table .
-        " WHERE " . $idkey . " = " . $id);
-      return $query->fetch_assoc();
-    }
-    return array();
-  }
+
+*/
 }
 

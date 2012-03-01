@@ -3,6 +3,9 @@
 <html><head><title>Rate-O-Rama!</title></head>
 
 <?php
+
+error_reporting(E_ALL);
+
 // display login/logout link based on login status
 //require_once 'inc/login_header.inc';
 ?>
@@ -17,11 +20,16 @@
 
 require_once 'inc/usercrud.inc';
 
-$user_db = new UserCRUD;
-$user = $user_db->load_user(1);
+$user = new UserCRUD;
+
+echo '<form name="input" action="html_form_action.asp" method="get">';
+
+echo $user->html_form(1);
+
+echo '<input type="submit" value="Submit" />';
 
 echo '<pre>';
-print_r($user);
+//print_r($user);
 echo '</pre>';
 
 ?>

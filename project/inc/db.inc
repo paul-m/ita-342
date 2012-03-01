@@ -75,7 +75,7 @@ function get_db() {
  * @param Schema name $name. (default: '')
  * @return Array specifying schema for given name.
  */
-function get_schema($name = '') {
+function get_schema_old($name = '') {
   $schema = array(
     'users' => array(
       'id' => 'INT',//int(11) NOT NULL auto_increment,
