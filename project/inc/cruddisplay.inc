@@ -16,7 +16,7 @@ class CRUDDisplay extends CRUDOOP {
         $display_info = NULL;
         if (isset($info['form'])) $display_info = $info['form'];
         if ($display_info && ($db_col != '#UNIQUEID')) {
-          if ($display_info['display'] != 'hidden') {
+          if (isset($display_info['display']) && ($display_info['display'] != 'hidden')) {
             $label = $db_col;
             if (isset($display_info['label'])) $label = $display_info['label'];
             $text = $record[$db_col];
@@ -25,7 +25,8 @@ class CRUDDisplay extends CRUDOOP {
           }
         }
       }
-    if (count($table) < 1) return "<div><h3>Unable to display user id: $user_id.</h3></div>";
+      if (count($table) < 1)
+        return "<div><h3>Unable to display user id: $user_id.</h3></div>";
 
       // now we have $table which is full of lovely info.
       // let's make a chart.

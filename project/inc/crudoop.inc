@@ -70,7 +70,7 @@ class CRUDOOP {
    * as determined by the schema. Helper for building
    * SQL queries.
    */
-/*  function sql_value_entick($value, $key) {
+  function sql_value_entick($value, $key) {
 //echo "sql_value_entick: $key : $value\n";
     switch ($this->schema[$key]['sanitize']) {
       // textual types get ticks
@@ -85,11 +85,11 @@ class CRUDOOP {
     return $value;
   }
 
-  function write_record($record, $table, $idkey = NULL) {
+  function write_record($record) {
     // if 'id' is given, then it's an update. otherwise, an insert.
     $keys = array_intersect_key($record, $this->schema);
     // check if the id key exists. if it's not there, insert.
-    if (!array_key_exists($idkey, $keys)) {
+    if (!array_key_exists($this->idkey, $keys)) {
       // prepare an insert.
       $into = array();
       $values = array();
@@ -97,7 +97,7 @@ class CRUDOOP {
         $into[] = $key;
         $values[] = $this->sql_value_entick($record[$key], $key);
       }
-      $queryString = 'INSERT INTO ' . $table . ' (' .
+      $queryString = 'INSERT INTO ' . $this->table . ' (' .
         implode(", ", $into) .
         ") VALUES (" .
         implode(", ", $values) . ")";
@@ -108,18 +108,18 @@ class CRUDOOP {
         $set[$key] = $key . "=" . $this->sql_value_entick($record[$key], $key);
       }
       // remove the id from the SET part of the query
-      unset($set[$idkey]);
+      unset($set[$this->idkey]);
       $queryString = 'UPDATE ' . $table . ' SET ' .
         implode(", ", $set) .
-        " WHERE " . $idkey . " = " . $record[$idkey];
+        " WHERE " . $this->idkey . " = " . $record[$this->idkey];
     }
-echo "<br><br>SQL: $queryString<br><br>";
-if (!$this->db_connection) echo "woops no db!";
-    $query = $this->db_connection->query($queryString);
+//echo "<br><br>SQL: $queryString<br><br>";
+//if (!$this->db_connection) echo "woops no db!";
+    $query = DB::connection()->query($queryString);
     // TODO: exception for a bad outcome.
   }
 
-  function delete_record($id, $table, $idkey = 'id') {
+/*  function delete_record($id, $table, $idkey = 'id') {
     // for schema, delete record where key = id.
     if ($this->db_connection) {
       $query = $this->db_connection->query("DELETE FROM " . $table .

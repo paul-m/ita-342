@@ -1,9 +1,11 @@
 <?php
 
+require_once 'arraycheck.inc';
+
 /**
  * Session is a static class to deal with the current session.
  */
-class Session {
+class Session extends ArrayCheck {
   public static function start() {
     return session_start();
   }
@@ -23,8 +25,7 @@ class Session {
    */
   public static function get($key, $default = NULL) {
     self::start();
-    if (isset($_SESSION) && isset($_SESSION[$key]))
-      return $_SESSION[$key];
+    if (isset($_SESSION)) return parent::get($_SESSION, $key, $default);
     return $default;
   }
 
@@ -33,17 +34,14 @@ class Session {
    */
   public static function set($key = '', $value = 1) {
     self::start();
-    if ($key) {
-      if (isset($_SESSION)) {
-        $_SESSION[$key] = $value;
-      }
-    }
+    if (isset($_SESSION)) return parent::set($_SESSION, $key, $value);
+    return FALSE;
   }
   
-/*  public static function unset($key = '') {
+  public static function sess_unset($key = '') {
     self::start();
-    if (isset($_SESSION) && isset($_SESSION[$key])) unset($_SESSION[$key]);
-  }*/
+    if (isset($_SESSION)) parent::arr_unset($_SESSION, $key);
+  }
 
   /**
    * if a user is logged in, return their id.
