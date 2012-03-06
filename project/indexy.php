@@ -20,17 +20,17 @@ error_reporting(E_ALL);
 
 require_once 'inc/usercrud.inc';
 
-$user = new UserCRUD;
+$userDB = new UserCRUD;
 
-echo '<form name="input" action="html_form_action.asp" method="get">';
+$user = $userDB->load_user(28);
 
-echo $user->html_form(1);
+//echo '<form name="input" action="html_form_action.asp" method="get">';
 
-echo '<input type="submit" value="Submit" />';
+echo $userDB->html_display(28);
 
-echo '<pre>';
-//print_r($user);
-echo '</pre>';
+//echo '<input type="submit" value="Submit" />';
+
+//echo '<pre>'; var_dump($user); echo '</pre>';
 
 ?>
 

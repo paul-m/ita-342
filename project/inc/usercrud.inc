@@ -5,8 +5,9 @@
  * It can also load database user records and give you arrays.
  */
 
+require_once 'arraycheck.inc';
 require_once 'cruddisplay.inc';
-require_once 'user.inc';
+require_once 'superglobals.inc';
 
 class UserCRUD extends CRUDDisplay {
 
@@ -25,8 +26,14 @@ class UserCRUD extends CRUDDisplay {
     // hash the password on the way out... if it's set.
     // unset the password to update a record without changing it.
     if (isset($record['password'])) {
-      $record['password'] = User::hash_password($record[$key]);
+      $record['password'] = User::hash_password($record['password']);
     }
+    // add user type
+    ArrayCheck::set_if_not_set($record, 'type', 'user');
+    // add modified time, created time if we're doing an insert.
+    $record['modified'] = time();
+    if (ArrayCheck::arr_get($record, 'id', -1) > 0)
+      $record['created'] = time;
     $this->convert_unix_to_datetime_for_key($record, 'modified');
     $this->convert_unix_to_datetime_for_key($record, 'created');
     parent::write_record($record);
@@ -40,6 +47,13 @@ class UserCRUD extends CRUDDisplay {
       $this->convert_datetime_to_unix_for_key($record, 'created');
     }
     return $record;
+  }
+  
+  function load_user_username($username = '') {
+    if ($username) {
+      return parent::load_records_for_keyvalue(array('user_name' => $username));
+    }
+    return NULL;
   }
   
   function delete_user($id = -1) {

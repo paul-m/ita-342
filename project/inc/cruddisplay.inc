@@ -1,13 +1,15 @@
 <?php
 
 require_once 'crudoop.inc';
+require_once 'arraycheck.inc';
 
 class CRUDDisplay extends CRUDOOP {
 
   // return HTML as a nice display of the data.
   // we'll just make a table for now. easy to process.
   function html_display($id = -1) {
-    if ($id < 0) return "<div><h3>Unable to load non-existent record.</h3></div>";
+//    if ($id < 0) return "<div><h3>Unable to load non-existent record.</h3></div>";
+//echo "loading: $id";
     $record = $this->load_record($id);
     if ($record) {
       $table = array();
@@ -53,8 +55,46 @@ class CRUDDisplay extends CRUDOOP {
     if ($id > 0) {
       $record = $this->load_record($id);
     } else {
-      $record = array($idkey => $id);
+      $record = array($this->idkey => $id);
     }
+    $table = array();
+    $schema = $this->schema;
+    $html = '';
+    foreach($schema as $db_col=>$info) {
+      $display_info = ArrayCheck::arr_get($info, 'form', NULL);
+      // we don't want to show #uniqueid.
+      // there's probably a better way to structure this.
+      if ($display_info && (!($db_col == '#UNIQUEID'))) {
+        if ($display_info['type'] != 'hidden') {
+          $html .= '<label for="' . $db_col . '">' . $display_info['label'] . "</label>\n";
+        }
+        $html .= '<input type="' . $display_info['type'] .
+          '" name="' . $db_col . 
+          '" value="' . ArrayCheck::arr_get($record, $db_col, '') . '" /><br>' . "\n";
+      }
+    }
+    return $html;
+  }
+
+  // dump our table to an XML file.
+  function xml_to_file($filepointer = NULL) {
+//    if (!$filepointer) return;
+    $xml = '';
+echo 'xml_to_file...';
+    $data = $this->load_all_records();
+    echo '<pre>'; print_r($data); echo '</pre>';
+    $xml .= '<?xml version="1.0" ?>' . "\r\n" .
+      '<' . $this->table . ">\r\n";
+    foreach($data as $recordID=>$record) {
+      $xml .= '<recordtype ID="' . $recordID . '">' . "\r\n";
+      foreach($record as $key=>$value) {
+        $xml .= "<$key>" . $value . "/$key>";
+      }
+    }
+
+    echo $xml;
+  }
+/*
     $table = array();
     $schema = $this->schema;
     $html = '';
@@ -75,6 +115,7 @@ class CRUDDisplay extends CRUDOOP {
     }
     return $html;
   }
+*/
 }
 
 

@@ -5,27 +5,14 @@ require_once 'arraycheck.inc';
 /**
  * Session is a static class to deal with the current session.
  */
-class Session extends ArrayCheck {
-  public static function start() {
-    return session_start();
-  }
-  // get or set a session ID.
-  public static function id($id = NULL) {
-    if ($id) return session_id($id);
-    return session_id();
-  }
-  public static function destroy() {
-    return session_destroy();
-  }
-
+class Cookie extends ArrayCheck {
   /**
-   * helper method to get a value from $_SESSION.
+   * helper method to get a value from $_COOKIE.
    * Pass the name of the key to gather
    * Pass default value you want returned if the variable doesn't exist.
    */
   public static function get($key, $default = NULL) {
-    self::start();
-    if (isset($_SESSION)) return parent::get($_SESSION, $key, $default);
+    if (isset($_COOKIE)) return parent::get($_COOKIE, $key, $default);
     return $default;
   }
 
@@ -33,14 +20,12 @@ class Session extends ArrayCheck {
    * Set session variables.
    */
   public static function set($key = '', $value = 1) {
-    self::start();
-    if (isset($_SESSION)) return parent::set($_SESSION, $key, $value);
+    if (isset($_COOKIE)) return parent::set($_COOKIE, $key, $value);
     return FALSE;
   }
   
   public static function sess_unset($key = '') {
-    self::start();
-    if (isset($_SESSION)) parent::arr_unset($_SESSION, $key);
+    if (isset($_COOKIE)) parent::arr_unset($_COOKIE, $key);
   }
 
   /**

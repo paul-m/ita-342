@@ -41,12 +41,47 @@ class CRUDOOP {
     return array();
   }
 
+  function load_records_for_keyvalue($keyvalue = array()) {
+    if ($this->schema) {
+      $db_connection = DB::connection();
+      if ($db_connection) {
+        // should check to see if key of array exists in schema.
+        $keys = array_keys($keyvalue);
+        $key = $keys[0];
+        $querystring = "SELECT * FROM " . $this->table .
+          " WHERE " . $key . " = " .
+          $this->sql_value_entick($keyvalue[$key], $key);
+//    echo $querystring;
+        $query = $db_connection->query($querystring);
+        if ($query) return $query->fetch_assoc();
+      }
+    }
+    return array();
+  }
+  
+  function load_all_records() {
+    if ($this->schema) {
+      $db_connection = DB::connection();
+      if ($db_connection) {
+        $query = $db_connection->query('SELECT * FROM ' . $this->table);
+        $rows = array();
+        while($record = $query->fetch_assoc())
+          $rows[$record[$this->idkey]] = $record;
+//        echo '<pre>'; var_dump($rows); echo '</pre>';
+        return $rows;//$query->fetch_all();
+      }
+    }
+    return array();
+  }
+
   /**
    * helper function to convert a unix timestamp to a proper
    * DATETIME, for a given key within the record.
    */
   function convert_unix_to_datetime_for_key(&$record, $key) {
-    if ($this->schema[$key]['type'] == 'DATETIME') {
+    $column = ArrayCheck::arr_get($this->schema, $key, NULL);
+    if (!$column) return;
+    if (ArrayCheck::arr_get($column, 'type', 'NOTDATETIME') == 'DATETIME') {
       // convert the item in the record.
       $timestamp = $record[$key];
       $record[$key] = date("Y-m-d H:i:s", $timestamp);
@@ -58,7 +93,9 @@ class CRUDOOP {
    * timestamp, for a given key within the record.
    */
   function convert_datetime_to_unix_for_key(&$record, $key) {
-    if ($this->schema[$key]['type'] == 'DATETIME') {
+    $column = ArrayCheck::arr_get($this->schema, $key, NULL);
+    if (!$column) return;
+    if (ArrayCheck::arr_get($column, 'type', 'NOTDATETIME') == 'DATETIME') {
       // convert the item in the record.
       $datetime = $record[$key];
       $record[$key] = strtotime($datetime);
@@ -71,8 +108,8 @@ class CRUDOOP {
    * SQL queries.
    */
   function sql_value_entick($value, $key) {
-//echo "sql_value_entick: $key : $value\n";
-    switch ($this->schema[$key]['sanitize']) {
+    switch (ArrayCheck::arr_get($this->schema[$key], 'sanitize', 'VARCHAR')) {
+//    switch ($this->schema[$key]['sanitize']) {
       // textual types get ticks
       // PASSWORD is expected to have been hashed.
       // DATETIME is expected to be formatted properly by caller.

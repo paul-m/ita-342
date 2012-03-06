@@ -23,15 +23,35 @@ class ArrayCheck {
    * We do this so we can deal with superglobals that might
    * not exist, like $_SESSION.
    */
-  public static function arr_set($array, $key = '', $value = 1) {
-    if ($key && $array) {
+  public static function arr_set(&$array, $key = '', $value = 1) {
+    if (isset($array) && ($key != '')) {
       $array[$key] = $value;
       return $value;
     }
     return FALSE;
   }
   
-  public static function arr_unset($array, $key = '') {
-    if ($key && $array) unset($array[$key]);
+  public static function set_if_not_set(&$array, $key = '', $value = 1) {
+    if (!self::arr_get($array, $key, NULL)) {
+      $array[$key] = $value;
+      return $value;
+    }
+    return FALSE;
+  }
+  
+  public static function arr_unset(&$array, $key = '') {
+    if ($key && $array) {
+      if (isset($array[$key])) {
+        unset($array[$key]);
+      }
+    }
+  }
+  
+  public static function arr_for_keys($array, $keys = array()) {
+    if ($array) {
+      $result = array_intersect_key($array, $keys);
+      return $result;
+    }
+    return array();
   }
 }
