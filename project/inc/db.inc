@@ -66,33 +66,6 @@ function get_db() {
   );
 }
 
-/**
- * get_schema function.
- * 
- * Schema is for validation and display.
- *
- * @access public
- * @param Schema name $name. (default: '')
- * @return Array specifying schema for given name.
- */
-function get_schema_old($name = '') {
-  $schema = array(
-    'users' => array(
-      'id' => 'INT',//int(11) NOT NULL auto_increment,
-      'type' => 'VARCHAR',// varchar(255) NOT NULL default 'user',
-      'first_name' => 'VARCHAR',// varchar(256) default NULL,
-      'last_name' => 'VARCHAR',// varchar(256) default NULL,
-      'user_name' => 'VARCHAR',// varchar(256) default NULL,
-      'password' => 'PASSWORD',// password special case. replaced with hash on write.
-      'hint' => 'VARCHAR',// varchar(40) default NULL,
-      'created' => 'DATETIME', // datetime default NULL,
-      'modified' => 'DATETIME', //datetime default NULL,
-      'email_address' => 'VARCHAR',// varchar(256) default NULL,
-    ),
-  );
-  return $schema[$name];
-}
-
 /*
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL auto_increment,

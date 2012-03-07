@@ -1,6 +1,8 @@
 <?php
 include 'inc/common_head.inc';
 
+include 'site/common_header.html.inc';
+
 require_once 'inc/schema.inc';
 require_once 'inc/usercrud.inc';
 require_once 'inc/superglobals.inc';
@@ -16,7 +18,7 @@ if ($request_method == 'GET') {
   // 2) Logged in: List users minimal
   // 3) Logged in admin: List users w/ admin function
   
-  $admin = TRUE;
+  $admin = FALSE;
   $userID = Session::current_user();
   if ($userID > 0) {
     // user is logged in.
@@ -30,6 +32,8 @@ if ($request_method == 'GET') {
   $userdb = new UserCRUD;
   $users = $userdb->load_all_records();
 //  echo '<pre>'; var_dump($users); echo '</pre>';
+
+  echo '<h2>The Big List Of Users</h2>';
 
   $columns = array('first_name'=>'First name', 'last_name'=>'Last name', 'user_name'=>'Username');
   
@@ -63,5 +67,7 @@ if ($request_method == 'GET') {
 
 // end of GET.
 }
+
+include 'site/common_footer.html.inc';
 
 include 'inc/common_foot.inc';

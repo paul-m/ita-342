@@ -97,11 +97,29 @@ function get_schema($table) {
           'label' => 'Hint',
         ),
       ),
+      'created' => array(
+        'type' => 'DATETIME',
+        'sanitize' => 'DATETIME',
+        'form' => array (
+          'type'=>'text',
+          'label'=>'Created',
+        ),
+      ),
+      'modified' => array(
+        'type' => 'DATETIME',
+        'sanitize' => 'DATETIME',
+        'form' => array (
+          'type'=>'text',
+          'display' => 'hidden',
+          'label'=>'Modified',
+        ),
+      ),
       'email_address' => array(
         'type' => 'VARCHAR',
         'sanitize' => 'EMAIL',
         'form' => array (
           'type' => 'text',
+          'display' => 'hidden',
           'label' => 'Email',
         ),
       ),
