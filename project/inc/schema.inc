@@ -37,6 +37,8 @@
 
 function get_schema($table) {
   $schema = array(
+
+/** USERS **/
     'users' => array (
       '#UNIQUEID' => 'id',
       'id' => array(
@@ -121,6 +123,67 @@ function get_schema($table) {
           'type' => 'text',
           'display' => 'hidden',
           'label' => 'Email',
+        ),
+      ),
+    ),
+
+/** QUESTIONS **/
+    'questions' => array (
+      '#UNIQUEID' => 'id',
+      'id' => array(
+        'type' => 'INT',
+        'sanitize' => 'INT',
+        'form' => array (
+          'type' => 'hidden',
+          'display' => 'hidden',
+        ),
+      ),
+      'survey_id' => array( // SURVEY_ID is doing service as user id.
+        'type' => 'INT',
+        'sanitize' => 'INT',
+        'form' => array (
+          'type' => 'hidden',
+          'display' => 'hidden',
+        ),
+      ),
+      'sequence' => array(
+        'type' => 'INT',
+        'sanitize' => 'INT',
+        'form' => array (
+          'type' => 'hidden',
+          'display' => 'hidden',
+        ),
+      ),
+      'question' => array(
+        'type' => 'VARCHAR',
+        'sanitize' => 'VARCHAR',
+        'form' => array (
+          'type' => 'text',
+          'display' => 'Twist',
+        ),
+      ),
+      'desc' => array(
+        'type' => 'VARCHAR',
+        'sanitize' => 'VARCHAR',
+        'form' => array (
+          'type' => 'hidden',
+        ),
+      ),
+      'created' => array(
+        'type' => 'DATETIME',
+        'sanitize' => 'DATETIME',
+        'form' => array (
+          'type'=>'text',
+          'label'=>'Created',
+        ),
+      ),
+      'modified' => array(
+        'type' => 'DATETIME',
+        'sanitize' => 'DATETIME',
+        'form' => array (
+          'type'=>'text',
+//          'display' => 'hidden',
+          'label'=>'Modified',
         ),
       ),
     ),

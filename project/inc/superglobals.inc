@@ -145,6 +145,11 @@ class Session extends ArrayCheck {
     return $default;
   }
   
+  /** 
+   * return true if current user is an admin
+   */
+  
+  
   public static function set_current_user($id = -1) {
     self::start();
     if ($id < 1) {
