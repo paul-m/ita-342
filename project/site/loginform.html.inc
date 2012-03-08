@@ -1,5 +1,5 @@
 <!-- HTML snippet for login form. -->
-<form name="input" action="/login.php" method="post">
+<form name="input" action="login.php" method="post">
 <fieldset><legend>Login:</legend>
 <input type="hidden" name="type" value="login" /><br>
 <label for="user_name">Username</label>

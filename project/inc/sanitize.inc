@@ -1,5 +1,7 @@
 <?php
 
+require_once 'db.inc';
+
 function sanitize_input_schema($input = array(), $schema = array()) {
   // return an array made up of key/value pairs from $input,
   // for keys in $schema, with sanitized values.
@@ -25,7 +27,7 @@ function sanitize_VARCHAR($varchar) {
   // Standard sanitize voodoo for varchar input text
   // heading for a MySQL database.
   if (get_magic_quotes_gpc()) $varchar = stripslashes($varchar);
-  return mysql_real_escape_string($varchar);
+  return DB::real_escape_string($varchar);
 }
 
 function sanitize_EMAIL($email) {

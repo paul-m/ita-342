@@ -33,6 +33,10 @@ class DB {
     self::$mysqli = NULL;
   }
 
+  public static function real_escape_string($suspect) {
+    return self::connection()->real_escape_string($suspect);
+  }
+
   /**
    * The designated function to use in this class.
    */
