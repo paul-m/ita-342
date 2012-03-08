@@ -18,14 +18,13 @@ if ($request_method == 'GET') {
   // 2) Logged in: List users minimal
   // 3) Logged in admin: List users w/ admin function
   
-  $admin = FALSE;
+  $admin = Session::current_user_is_admin();
   $userID = Session::current_user();
   if ($userID > 0) {
     // user is logged in.
     // figure out if they're an admin.
     $userdb = new UserCRUD;
     $user = $userdb->load_user($userID);
-    $admin = ($user['type'] == 'admin');
   }
   
   // let's show a big table of users.

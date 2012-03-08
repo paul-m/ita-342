@@ -32,7 +32,6 @@ if ($request_method == 'GET') {
     echo $user->html_form(-1);
     echo '<input type="submit" value="Submit" />';
     echo '</fieldset>';
-    //show_register_form();
   }
 
 // end of GET.
@@ -41,24 +40,17 @@ if ($request_method == 'GET') {
   // POST means user tried to add a user record.
   $userSchema = get_schema('users');
   $input = Post::for_keys($userSchema);
-  echo '<pre>'; var_dump($input); echo '</pre>';
   
   if (Post::get('password_reenter') != $input['password']) {
     Session::set_message('Passwords do not match.');
   }
   $input = sanitize_input_schema($input, $userSchema);
   unset($input['id']);
-  $input['created'] = time();
-  $input['modified'] = time();
-  $input['type'] = 'user';
-  // more stuff here.
-
   $cruddy = new UserCRUD();
   $cruddy->write_user($input);
-  echo 'added the user.';
+  echo '<div>Welcome! Why not <a href="login.php">log in</a>?</div>';
   //send_email();
   // redirect to register yay! login.
-//  break;
 }
 
 include 'inc/common_foot.inc';

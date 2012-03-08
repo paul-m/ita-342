@@ -27,3 +27,8 @@ function sanitize_VARCHAR($varchar) {
   if (get_magic_quotes_gpc()) $varchar = stripslashes($varchar);
   return mysql_real_escape_string($varchar);
 }
+
+function sanitize_EMAIL($email) {
+echo 'sanitizing email!!';
+  return filter_var($email, FILTER_SANITIZE_EMAIL);
+}

@@ -159,6 +159,20 @@ class Session extends ArrayCheck {
     return FALSE;
   }
   
+  public static function current_user_can_edit() {
+    $currid = self::current_user();
+    if ($currid > 0) {
+      $userdb = new UserCRUD;
+      $current_user = $userdb->load_user($currid);
+      $can = ArrayCheck::arr_get($current_user, 'type', 'notadmin') == 'admin';
+      if (!$can)
+        $can = ArrayCheck::arr_get($current_user, 'id', NULL) === 
+          Session::current_user(-1);
+      return $can;
+    }
+    return FALSE;
+  }
+  
   public static function set_current_user($id = -1) {
     self::start();
     if ($id < 1) {

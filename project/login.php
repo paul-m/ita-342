@@ -14,7 +14,8 @@ if (Server::request_method() == 'GET') {
   $type = Get::get_get('type', '');
   if ($type == 'logout') {
     // User wants to logout.
-    Session::set_current_user(-1);
+//    Session::set_current_user(-1);
+    Session::destroy();
     echo "<div>You're logged out.</div>";
     include 'site/loginform.html.inc';
   }
