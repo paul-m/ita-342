@@ -71,7 +71,7 @@ if ($request_method == 'GET') {
     } else {
       // no valid twist ID so show the big list of twists.
       $twistdb = new TwistCRUD;
-      $twists = $twistdb->load_all_records();
+      $twists = $twistdb->load_all_records(array('created'=>'DESC'));
 
       if (count($twists) > 0) {
         $db = DB::connection();
@@ -112,7 +112,7 @@ if ($request_method == 'GET') {
       } else {
         // no twists to display.
         echo "<h2>Sorry, there aren't any twists to lists.</h2>";
-        echo '<div>Why not <a href="' . Server::php_self('index.php') . '">add one</a>?</div>';
+        echo '<div>Why not <a href="' . Server::php_self('index.php') . '?type=add">add one</a>?</div>';
       }
     }
   }

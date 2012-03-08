@@ -60,11 +60,18 @@ class CRUDOOP {
     return array();
   }
   
-  function load_all_records() {
+  function load_all_records($orderby = NULL) { //array('id'=>'DESC')) {
     if ($this->schema) {
       $db_connection = DB::connection();
       if ($db_connection) {
-        $query = $db_connection->query('SELECT * FROM ' . $this->table);
+        $orderbyquery = '';
+        if ($orderby) {
+          $ordercolumn = key($orderby);
+          $ordertype = $orderby[$ordercolumn];
+          $orderbyquery = ' ORDER BY ' . sanitize_VARCHAR($ordercolumn) .
+            ' ' . sanitize_VARCHAR($ordertype);
+        }
+        $query = $db_connection->query('SELECT * FROM ' . $this->table . $orderbyquery);
         $rows = array();
         while($record = $query->fetch_assoc())
           $rows[$record[$this->idkey]] = $record;

@@ -70,7 +70,7 @@ if ($request_method == 'GET') {
     } else {
       // no valid twist ID so show the big list of twists.
       $userdb = new UserCRUD;
-      $twists = $userdb->load_all_records();
+      $twists = $userdb->load_all_records(array('created'=>'DESC'));
 
       if (count($twists) > 0) {
         $userdb = new UserCRUD;

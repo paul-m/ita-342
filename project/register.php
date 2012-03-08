@@ -41,9 +41,9 @@ if ($request_method == 'GET') {
   $userSchema = get_schema('users');
   $input = Post::for_keys($userSchema);
   
-  if (Post::get('password_reenter') != $input['password']) {
+/*  if (Post::get('password_reenter') != $input['password']) {
     Session::set_message('Passwords do not match.');
-  }
+  }*/
   $input = sanitize_input_schema($input, $userSchema);
   unset($input['id']);
   $cruddy = new UserCRUD();

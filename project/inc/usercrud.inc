@@ -24,15 +24,16 @@ class UserCRUD extends CRUDDisplay {
    */
   function write_user($record = array()) {
     $isinsert = (ArrayCheck::arr_get($record, 'id', -1) < 1);
-    // hash the password on the way out... if it's set.
     // unset the password to update a record without changing it.
     if ($isinsert) {
       $record['created'] = time();
       if (isset($record['password'])) {
+        // hash the password on the way out... if it's set.
         $record['password'] = User::hash_password($record['password']);
       }
       unset($record['id']);
     } else {
+      // SORRY, YOU CAN'T CHANGE YOUR PASSWORD. WOOPS.
       unset($record['password']);
     }
     // add modified time, created time if we're doing an insert.
