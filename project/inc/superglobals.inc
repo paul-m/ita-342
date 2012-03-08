@@ -297,16 +297,17 @@ class User {
     return md5(self::$hash_salt . $password);
   }
 
-  public static function session_user_id() {
+/*  public static function session_user_id() {
     return Session::variable('user_id', -1);
   }
-
+*/
   /**
    * class function logged_in().
    * Return TRUE if the current session reflects a logged-in user.
    */
-  public static function logged_in() {
+/*  public static function logged_in() {
     $user = self::current_user();
     return ($user['id'] > 0);
   }
+*/
 }
