@@ -1,6 +1,8 @@
 <?php
 include 'inc/common_head.inc';
 
+include 'site/common_header.html.inc';
+
 require_once 'inc/arraycheck.inc';
 require_once 'inc/superglobals.inc';
 require_once 'inc/usercrud.inc';

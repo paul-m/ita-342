@@ -8,6 +8,7 @@
  */
 
 require_once 'arraycheck.inc';
+require_once 'usercrud.inc';
 
 /**
  * Session is a static class to deal with the current session.
@@ -24,7 +25,7 @@ class Post extends ArrayCheck {
   }
 
   /**
-   * Set session variables.
+   * Set post variables.
    */
   public static function set($key = '', $value = 1) {
     if (isset($_POST)) return parent::arr_set($_POST, $key, $value);
@@ -106,7 +107,6 @@ class Session extends ArrayCheck {
    */
   public static function get($key, $default = NULL) {
     self::start();
-//    echo "getting: $key ";
     if (isset($_SESSION)) return parent::arr_get($_SESSION, $key, $default);
     return $default;
   }
@@ -132,6 +132,7 @@ class Session extends ArrayCheck {
     }
   }
 
+
   /**
    * if a user is logged in, return their id.
    * $default otherwise.
@@ -148,7 +149,15 @@ class Session extends ArrayCheck {
   /** 
    * return true if current user is an admin
    */
-  
+  public static function current_user_is_admin() {
+    $currid = self::current_user();
+    if ($currid > 0) {
+      $userdb = new UserCRUD;
+      $current_user = $userdb->load_user($currid);
+      return ArrayCheck::arr_get($current_user, 'type', 'notadmin') == 'admin';
+    }
+    return FALSE;
+  }
   
   public static function set_current_user($id = -1) {
     self::start();

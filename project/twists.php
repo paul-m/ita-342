@@ -40,9 +40,7 @@ if (count($twists) > 0) {
   }
   
   // and now we figure out if we have admin privs
-  $admin = FALSE;
-  $current_user = $userdb->load_user(Session::current_user());
-  if ($current_user['id'] > 0) $admin = $current_user['type'] == 'admin';
+  $admin = Session::current_user_is_admin();
   
   // start showing stuff.
   echo '<h2>The Big List Of Twists</h2>';
@@ -51,24 +49,14 @@ if (count($twists) > 0) {
   
   echo '<table border="1"><tr>';
   // header row
-  foreach($columns as $column=>$label) {
-    echo '<th>' . $label . '</th>';
-  }
-  // add authorship
-  echo '<th>By</th>';
-  if ($admin) {
-    // label for extra edit column.
-    echo '<th>Edit</th></tr>';
-  }
+  echo '<th>Twist</th><th>By</th>';
+  if ($admin) echo '<th>Edit</th></tr>';
+  
   // ...and now all the twist rows.
   foreach($twists as $twist) {
     echo '<tr>';
-    foreach($columns as $key=>$value) {
-      echo '<td>' . $twist[$key] . '</td>';
-    }
-    $user = $users[$twist['survey_id']];
-    echo '<td>' . $user['user_name'] . '</td>';
-    // add the edit form
+    echo '<td><a href="twist.php?id=' . $twist['id'] . '">' .
+      $twist['question'] . '</a></td><td>' . $user['user_name'] . '</td>';
     if ($admin) {
       echo '<td><form name = "edittwist" action = "twist.php" method = "GET">';
       echo '<input type="hidden" id="edittwist" name="type" value="edit" />';

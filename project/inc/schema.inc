@@ -146,34 +146,34 @@ function get_schema($table) {
           'display' => 'hidden',
         ),
       ),
-      'sequence' => array(
+/*      'sequence' => array(
         'type' => 'INT',
         'sanitize' => 'INT',
         'form' => array (
           'type' => 'hidden',
           'display' => 'hidden',
         ),
-      ),
+      ),*/
       'question' => array(
         'type' => 'VARCHAR',
         'sanitize' => 'VARCHAR',
         'form' => array (
           'type' => 'text',
-          'display' => 'Twist',
+          'label' => 'Twist',
         ),
       ),
-      'desc' => array(
+ /*     'desc' => array(
         'type' => 'VARCHAR',
         'sanitize' => 'VARCHAR',
         'form' => array (
           'type' => 'hidden',
         ),
-      ),
+      ),*/
       'created' => array(
         'type' => 'DATETIME',
         'sanitize' => 'DATETIME',
         'form' => array (
-          'type'=>'text',
+          'type'=>'hidden',
           'label'=>'Created',
         ),
       ),
@@ -181,7 +181,7 @@ function get_schema($table) {
         'type' => 'DATETIME',
         'sanitize' => 'DATETIME',
         'form' => array (
-          'type'=>'text',
+          'type'=>'hidden',
 //          'display' => 'hidden',
           'label'=>'Modified',
         ),

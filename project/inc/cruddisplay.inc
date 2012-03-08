@@ -30,7 +30,7 @@ class CRUDDisplay extends CRUDOOP {
           }
         }
       }
-              echo '<pre>'; var_dump($table); echo '</pre>';
+              //echo '<pre>'; var_dump($table); echo '</pre>';
       if (count($table) < 1)
         return "<div><h3>Unable to display record id: $id.</h3></div>";
 
@@ -70,7 +70,8 @@ class CRUDDisplay extends CRUDOOP {
       // there's probably a better way to structure this.
       if ($display_info && (!($db_col == '#UNIQUEID'))) {
         if ($display_info['type'] != 'hidden') {
-          $html .= '<label for="' . $db_col . '">' . $display_info['label'] . "</label>\n";
+          $html .= '<label for="' . $db_col . '">' .
+          ArrayCheck::arr_get($display_info, 'label', $db_col) . "</label>\n";
         }
         $html .= '<input type="' . $display_info['type'] .
           '" name="' . $db_col . 

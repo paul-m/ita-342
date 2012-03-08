@@ -1,6 +1,8 @@
 <?php
 include 'inc/common_head.inc';
 
+include 'site/common_header.html.inc';
+
 require_once 'inc/schema.inc';
 require_once 'inc/usercrud.inc';
 require_once 'inc/superglobals.inc';
@@ -26,8 +28,10 @@ if ($request_method == 'GET') {
     // show a registration form.
     $user = new UserCRUD;
     echo '<form name="input" action="' . Server::php_self('register.php') . '" method="post">';
+    echo '<fieldset><legend>Register:</legend>';
     echo $user->html_form(-1);
     echo '<input type="submit" value="Submit" />';
+    echo '</fieldset>';
     //show_register_form();
   }
 

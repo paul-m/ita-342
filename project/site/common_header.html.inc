@@ -1,15 +1,18 @@
 <html>
 <head>
 <LINK href="site/common.css" rel="stylesheet" type="text/css">
-<title>Message-O-Rama</title></head>
+<title>Twister</title></head>
 <body>
-<!--<div id="centeredmenu">
+<div id="centeredmenu">
    <ul>
-      <li><a href="#">Tab one</a></li>
-      <li><a href="#" class="active">Tab two</a></li>
-      <li><a href="#">Tab three</a></li>
-      <li><a href="#">Tab four</a></li>
+      <li><a href="index.php">Twists</a></li>
+      <li><a href="index.php?type=add">Add a Twist</a></li>
+      <li><a href="users.php">Users</a></li>
+      <li><a href="register.php">Register</a></li>
+      <li><a href="login.php">Login</a></li>
+      <li><a href="login.php?type=logout">Logout</a></li>
    </ul>
-</div>-->
-<div id="content">
+</div>
 <div id="wrapper">
+<div id="content">
+<div id="item">

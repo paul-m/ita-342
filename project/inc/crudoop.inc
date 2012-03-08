@@ -6,6 +6,7 @@
 
 require_once 'db.inc';
 require_once 'schema.inc';
+require_once 'arraycheck.inc';
 
 class CRUDOOP {
   protected $schema; // display/validation data.
@@ -83,7 +84,7 @@ class CRUDOOP {
     if (!$column) return;
     if (ArrayCheck::arr_get($column, 'type', 'NOTDATETIME') == 'DATETIME') {
       // convert the item in the record.
-      $timestamp = $record[$key];
+      $timestamp = (int)$record[$key];
       $record[$key] = date("Y-m-d H:i:s", $timestamp);
     }
   }
@@ -97,7 +98,7 @@ class CRUDOOP {
     if (!$column) return;
     if (ArrayCheck::arr_get($column, 'type', 'NOTDATETIME') == 'DATETIME') {
       // convert the item in the record.
-      $datetime = $record[$key];
+      $datetime = (int)$record[$key];
       $record[$key] = strtotime($datetime);
     }
   }
@@ -124,9 +125,10 @@ class CRUDOOP {
 
   function write_record($record) {
     // if 'id' is given, then it's an update. otherwise, an insert.
+    $affectedid = ArrayCheck::arr_get($record, $this->idkey, -1);
     $keys = array_intersect_key($record, $this->schema);
     // check if the id key exists. if it's not there, insert.
-    if (!array_key_exists($this->idkey, $keys)) {
+    if (!array_key_exists($this->idkey, $record)) {
       // prepare an insert.
       $into = array();
       $values = array();
@@ -146,28 +148,26 @@ class CRUDOOP {
       }
       // remove the id from the SET part of the query
       unset($set[$this->idkey]);
-      $queryString = 'UPDATE ' . $table . ' SET ' .
+      $queryString = 'UPDATE ' . $this->table . ' SET ' .
         implode(", ", $set) .
         " WHERE " . $this->idkey . " = " . $record[$this->idkey];
     }
-//echo "<br><br>SQL: $queryString<br><br>";
-//if (!$this->db_connection) echo "woops no db!";
     $query = DB::connection()->query($queryString);
+    if ($affectedid == -1) $affectedid = DB::connection()->insert_id;
+    return $affectedid;
     // TODO: exception for a bad outcome.
   }
 
-/*  function delete_record($id, $table, $idkey = 'id') {
+  function delete_record($id) {
     // for schema, delete record where key = id.
-    if ($this->db_connection) {
-      $query = $this->db_connection->query("DELETE FROM " . $table .
-        ' WHERE ' . $idkey . ' = ' . $id);
-      if (!$query) {
-        echo "Failed to delete id $id from MySQL.";
-      }
+    $query = DB::connection()->query("DELETE FROM " . $this->table .
+      ' WHERE ' . $this->idkey . ' = ' . $id);
+    if (!$query) {
+      echo "Failed to delete id $id from MySQL.";
     }
   }
   
-  function load_all_records() {
+/*  function load_all_records() {
     if ($this->db_connection) {
       $query = $this->db_connection->query("SELECT * FROM " . $table);
       $i=0;
