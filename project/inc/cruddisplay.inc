@@ -82,23 +82,59 @@ class CRUDDisplay extends CRUDOOP {
   }
 
   // dump our table to an XML file.
-  function xml_to_file($filepointer = NULL) {
-//    if (!$filepointer) return;
-    $xml = '';
-echo 'xml_to_file...';
-    $data = $this->load_all_records();
-    echo '<pre>'; print_r($data); echo '</pre>';
-    $xml .= '<?xml version="1.0" ?>' . "\r\n" .
-      '<' . $this->table . ">\r\n";
-    foreach($data as $recordID=>$record) {
-      $xml .= '<recordtype ID="' . $recordID . '">' . "\r\n";
-      foreach($record as $key=>$value) {
-        $xml .= "<$key>" . $value . "/$key>";
-      }
-    }
+  function xml($filepointer = NULL) {
+    $tablexmlname = $this->table . '-db-table';
+    if (!$filepointer) $file = fopen($tablexmlname . '.xml', 'w');
 
-    echo $xml;
+    $xml = '';
+    $data = $this->load_all_records();
+//    echo '<pre>'; print_r($data); echo '</pre>';
+    $xml .= '<?xml version="1.0" ?>' . "\n" .
+      '<' . $tablexmlname . ">\n";
+    fwrite($file, $xml);
+    foreach($data as $recordID=>$record) {
+      
+      $xml = '<recordtype ID="' . htmlentities($recordID) . '">' . "\n";
+      foreach($record as $key=>$value) {
+        $xml .= "<$key>" . htmlentities($value) . "</$key>\n";
+      }
+      $xml .= '</recordtype>' . "\n";
+      fwrite($file, $xml);
+    }
+    $xml = '</' . $tablexmlname . ">\n";
+    fwrite($file, $xml);
+    fclose($file);
+    return $tablexmlname . '.xml';
   }
+
+  // dump our table to an XML file.
+  function rss($filepointer = NULL) {
+    $tablexmlname = $this->table . '-db-table';
+    if (!$filepointer) $file = fopen($tablexmlname . '.rss', 'w');
+
+    $xml = '';
+    $data = $this->load_all_records();
+//    echo '<pre>'; print_r($data); echo '</pre>';
+    $xml .= '<?xml version="1.0" ?>' . "\n" .
+      '<' . $tablexmlname . ">\n";
+    fwrite($file, $xml);
+    foreach($data as $recordID=>$record) {
+      
+      $xml = '<recordtype ID="' . htmlentities($recordID) . '">' . "\n";
+      foreach($record as $key=>$value) {
+        $xml .= "<$key>" . htmlentities($value) . "</$key>\n";
+      }
+      $xml .= '</recordtype>' . "\n";
+      fwrite($file, $xml);
+    }
+    $xml = '</' . $tablexmlname . ">\n";
+    fwrite($file, $xml);
+    fclose($file);
+    return $tablexmlname . '.xml';
+  }
+
+
+
 /*
     $table = array();
     $schema = $this->schema;

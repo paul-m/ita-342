@@ -30,7 +30,7 @@ class ArrayCheck {
     }
     return FALSE;
   }
-  
+
   public static function set_if_not_set(&$array, $key = '', $value = 1) {
     if (!self::arr_get($array, $key, NULL)) {
       $array[$key] = $value;

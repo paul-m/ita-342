@@ -121,7 +121,7 @@ class Session extends ArrayCheck {
     }
     return FALSE;
   }
-  
+
   /**
    * Unset a session variable
    */
@@ -145,7 +145,7 @@ class Session extends ArrayCheck {
     if ($user && isset($user['id'])) return $user['id'];
     return $default;
   }
-  
+
   /** 
    * return true if current user is an admin
    */
@@ -159,7 +159,7 @@ class Session extends ArrayCheck {
     return FALSE;
   }
   
-  public static function current_user_can_edit() {
+  public static function current_user_can_edit($content_user = 0) {
     $currid = self::current_user();
     if ($currid > 0) {
       $userdb = new UserCRUD;
@@ -223,7 +223,7 @@ class Server extends ArrayCheck {
     if (isset($_SERVER)) return parent::arr_set($_SERVER, $key, $value);
     return FALSE;
   }
-  
+
   /**
    * Request type
    */
@@ -297,17 +297,4 @@ class User {
     return md5(self::$hash_salt . $password);
   }
 
-/*  public static function session_user_id() {
-    return Session::variable('user_id', -1);
-  }
-*/
-  /**
-   * class function logged_in().
-   * Return TRUE if the current session reflects a logged-in user.
-   */
-/*  public static function logged_in() {
-    $user = self::current_user();
-    return ($user['id'] > 0);
-  }
-*/
 }

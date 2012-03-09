@@ -62,6 +62,11 @@ if ($request_method == 'GET') {
       echo "<h2>Sorry. You can't delete anything.</h2>";
     }
   }
+  else if ($type == 'xml') {
+    $twistdb = new TwistCRUD;
+    $filename = $twistdb->xml();
+    echo '<h3>Your XML file here: <a href="' . $filename . '">' . $filename . '</a></h3>';
+  }
   
   else {
     if ($twistid > 0) {

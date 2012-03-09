@@ -12,6 +12,7 @@
       <li><a href="register.php">Register</a></li>
       <li><a href="login.php">Login</a></li>
       <li><a href="login.php?type=logout">Logout</a></li>
+      <li><a href="index.php?type=xml">XML</a></li>
    </ul>
 </div>
 <div id="wrapper">

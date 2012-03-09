@@ -31,6 +31,9 @@ function sanitize_VARCHAR($varchar) {
 }
 
 function sanitize_EMAIL($email) {
-echo 'sanitizing email!!';
   return filter_var($email, FILTER_SANITIZE_EMAIL);
+}
+
+function sanitize_DATETIME($datetime) {
+  return sanitize_VARCHAR($datetime);
 }
